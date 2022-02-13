@@ -1,6 +1,5 @@
 # VMagnify
 
-
 ## System requirements
 
 Python 3.8+
@@ -9,6 +8,20 @@ Python 3.8+
 
 In a terminal, execute the following command :
 ```pip install -r requirements.txt```
+
+## Debug the application
+
+### Linux, bash
+
+In a terminal, execute the following command :
+
+```export FLASK_ENV=development```
+
+### Windows, PowerShell
+
+In a terminal, execute the following command :
+
+```$env:FLASK_ENV = "development"```
 
 ## Launch the application
 
