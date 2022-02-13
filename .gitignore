@@ -109,6 +109,12 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+vmagnify/etc/
+vmagnify/Include/
+vmagnify/Lib/
+vmagnify/Scripts/
+vmagnify/share/
+vmagnify/pyvenv.cfg
 
 # Spyder project settings
 .spyderproject
