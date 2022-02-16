@@ -1,11 +1,19 @@
 from datetime import datetime
+from multiprocessing import Lock
 import os
-import re
 import threading
+from typing import List
 import cv2
 from cv2 import dnn_superres
 import requests
-from vmagnify import VMagnify
+from vmagnify.vmagnify import VMagnify
+
+
+class PictureData:
+    def __init__(self, path: str, height: int, width: int) -> None:
+        self.path = path
+        self.height = height
+        self.width = width
 
 
 class VMagnifyPicture(VMagnify):
@@ -14,7 +22,11 @@ class VMagnifyPicture(VMagnify):
 
     def __init__(self) -> None:
         """ class constructor """
-        self.original_picture = None
+        self.current_index = 0
+        self.pictures: List[PictureData] = list()
+        # Initialize the list of 4 pictures(original + 3 zoomed)
+        for i in range(4):
+            self.pictures.append(PictureData("", 0, 0))
 
     def __download_url_content(self, r, file_extension):
         """ download the content of the URL"""
@@ -25,20 +37,15 @@ class VMagnifyPicture(VMagnify):
         open(file_path, 'xb').write(r.content)
         return file_path
 
-    def __get_url(self, url: str):
-        """ do a GET request on the URL """
-        r = requests.get(url, allow_redirects=True)
-        _, file_extension = os.path.splitext(url)
-        return r, file_extension
-
     def __generate_pictures(self):
         """ generate the pictures of the 3 models """
+        mutex = threading.Lock()
         process_x2_picture = threading.Thread(target=self.__process_thread_picture, args=(
-            self.original_picture, self.EDSR_MODEL_X2_PATH))
+            self.EDSR_MODEL_X2_PATH, mutex, 1))
         process_x3_picture = threading.Thread(target=self.__process_thread_picture, args=(
-            self.original_picture, self.EDSR_MODEL_X3_PATH))
+            self.EDSR_MODEL_X3_PATH, mutex, 2))
         process_x4_picture = threading.Thread(target=self.__process_thread_picture, args=(
-            self.original_picture, self.EDSR_MODEL_X4_PATH))
+            self.EDSR_MODEL_X4_PATH, mutex, 3))
         process_x2_picture.start()
         process_x3_picture.start()
         process_x4_picture.start()
@@ -46,7 +53,25 @@ class VMagnifyPicture(VMagnify):
         process_x3_picture.join()
         process_x4_picture.join()
 
-    def __process_thread_picture(self, original_picture, model_path: str):
+    def get_picture_data(self, index: int):
+        """ return a tuple with path and shape data """
+        # update the current index with new index from slider
+        self.current_index = index
+        picture_data = self.pictures[index]
+        return picture_data.path, self.__get_shape(index)
+
+    def __get_shape(self, index: int):
+        """ return a string with shape data """
+        picture_data = self.pictures[index]
+        return "height : " + str(picture_data.height) + " px X width : " + str(picture_data.width) + " px"
+
+    def __get_url(self, url: str):
+        """ do a GET request on the URL """
+        r = requests.get(url, allow_redirects=True)
+        _, file_extension = os.path.splitext(url)
+        return r, file_extension
+
+    def __process_thread_picture(self, model_path: str, mutex: Lock, index: int):
         """ thread which generates a picture by calling the model """
         # Create an SR object
         sr = dnn_superres.DnnSuperResImpl_create()
@@ -56,17 +81,29 @@ class VMagnifyPicture(VMagnify):
         model_name, _ = os.path.splitext(base_name)
         # Get the model scale
         model_scale = int(model_name.split("x")[1])
-        file_name = os.path.basename(self.__file_path)
+        # The mutex permits to access with safe our list of pictures
+        mutex.acquire()
+        file_path = self.pictures[0].path
+        mutex.release()
+        file_name = os.path.basename(file_path)
+        file_name, _ = os.path.splitext(file_name)
         # Read the desired model
         sr.readModel(model_path)
+        # Set CUDA backend and target to enable GPU inference, one day !
+        # sr.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        # sr.setPreferableTarget(cv2.dnn.DNN_BACKEND_CUDA)
         # Configure the model
         sr.setModel(model_type, model_scale)
         # Process the picture
-        generated_picture = sr.upsample(original_picture)
+        generated_picture = sr.upsample(self.original_picture)
+        height, width, _ = generated_picture.shape
         # Save the picture
         new_file_path = self.GENERATED_FOLDER + \
             file_name+"_x"+str(model_scale)+".jpg"
         cv2.imwrite(new_file_path, generated_picture)
+        mutex.acquire()
+        self.pictures[index] = PictureData(new_file_path, height, width)
+        mutex.release()
 
     def __remove_file(self, path: str):
         """ remove the file when it is invalid """
@@ -84,22 +121,23 @@ class VMagnifyPicture(VMagnify):
             # ValueError means that the file extension found isn't in our list
             return False
         mat = cv2.imread(path)
-        h, w, c = mat.shape
-        if h > 0 and w > 0 and c == 3:
+        height, width, colors = mat.shape
+        if height > 0 and width > 0 and colors == 3:
             # picture is valid if we have an height and width greater than 0 and 3 color channels
-            self.__file_path = path
             self.original_picture = mat
+            # store the picture in the list
+            self.pictures[0] = PictureData(path, height, width)
             return True
         else:
             return False
 
-#    def __cleanup_pictures(self):
-
-#    def process_uploaded_picture(self, file: str):
+    # def process_uploaded_picture(self, contents, file_name: str):
+    #     """ process the uploaded picture """
+    #     print("contents : "+str(contents))
+    #     print("file_name : "+str(file_name))
 
     def process_url(self, url: str):
         """ process the URL """
-        self.url = url
         r, file_extension = self.__get_url(url)
         if r.status_code == 200:
             # status code 200 is OK
@@ -107,5 +145,9 @@ class VMagnifyPicture(VMagnify):
             res = self.__validate_file(file_path)
             if res:
                 self.__generate_pictures()
+                return self.get_picture_data(self.current_index)
             else:
                 self.__remove_file(file_path)
+                return "", "error picture is invalid !"
+        else:
+            return "", "error "+str(r.status_code)
