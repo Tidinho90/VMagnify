@@ -28,7 +28,7 @@ class VMagnifyPicture(VMagnify):
         for i in range(4):
             self.pictures.append(PictureData("", 0, 0))
 
-    def __download_url_content(self, r, file_extension):
+    def __download_url_content(self, r: requests.Response, file_extension: str):
         """ download the content of the URL"""
         current_datetime = datetime.now()
         # As original file name can be unreliable, file name is built with the current datetime
@@ -40,25 +40,18 @@ class VMagnifyPicture(VMagnify):
     def __generate_pictures(self):
         """ generate the pictures of the 3 models """
         mutex = threading.Lock()
-        process_x2_picture = threading.Thread(target=self.__process_thread_picture, args=(
+        x2_picture_thread = threading.Thread(target=self.__process_picture, args=(
             self.EDSR_MODEL_X2_PATH, mutex, 1))
-        process_x3_picture = threading.Thread(target=self.__process_thread_picture, args=(
+        x3_picture_thread = threading.Thread(target=self.__process_picture, args=(
             self.EDSR_MODEL_X3_PATH, mutex, 2))
-        process_x4_picture = threading.Thread(target=self.__process_thread_picture, args=(
+        x4_picture_thread = threading.Thread(target=self.__process_picture, args=(
             self.EDSR_MODEL_X4_PATH, mutex, 3))
-        process_x2_picture.start()
-        process_x3_picture.start()
-        process_x4_picture.start()
-        process_x2_picture.join()
-        process_x3_picture.join()
-        process_x4_picture.join()
-
-    def get_picture_data(self, index: int):
-        """ return a tuple with path and shape data """
-        # update the current index with new index from slider
-        self.current_index = index
-        picture_data = self.pictures[index]
-        return picture_data.path, self.__get_shape(index)
+        x2_picture_thread.start()
+        x3_picture_thread.start()
+        x4_picture_thread.start()
+        x2_picture_thread.join()
+        x3_picture_thread.join()
+        x4_picture_thread.join()
 
     def __get_shape(self, index: int):
         """ return a string with shape data """
@@ -71,7 +64,7 @@ class VMagnifyPicture(VMagnify):
         _, file_extension = os.path.splitext(url)
         return r, file_extension
 
-    def __process_thread_picture(self, model_path: str, mutex: Lock, index: int):
+    def __process_picture(self, model_path: str, mutex: Lock, index: int):
         """ thread which generates a picture by calling the model """
         # Create an SR object
         sr = dnn_superres.DnnSuperResImpl_create()
@@ -105,10 +98,6 @@ class VMagnifyPicture(VMagnify):
         self.pictures[index] = PictureData(new_file_path, height, width)
         mutex.release()
 
-    def __remove_file(self, path: str):
-        """ remove the file when it is invalid """
-        os.remove(path)
-
 #    def __upload_picture(self):
 
     def __validate_file(self, path: str):
@@ -131,6 +120,13 @@ class VMagnifyPicture(VMagnify):
         else:
             return False
 
+    def get_picture_data(self, index: int):
+        """ return a tuple with path and shape data """
+        # update the current index with new index from slider
+        self.current_index = index
+        picture_data = self.pictures[index]
+        return picture_data.path, self.__get_shape(index)
+
     # def process_uploaded_picture(self, contents, file_name: str):
     #     """ process the uploaded picture """
     #     print("contents : "+str(contents))
@@ -147,7 +143,8 @@ class VMagnifyPicture(VMagnify):
                 self.__generate_pictures()
                 return self.get_picture_data(self.current_index)
             else:
-                self.__remove_file(file_path)
+                # if picture is invalid, remove file from disk
+                os.remove(file_path)
                 return "", "error picture is invalid !"
         else:
             return "", "error "+str(r.status_code)

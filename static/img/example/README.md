@@ -1,5 +1,5 @@
 # Example informations
 
-## source : <https://commons.wikimedia.org/wiki/File:Lions_Family_Portrait_Masai_Mara.jpg>
+## source : <https://raw.githubusercontent.com/Saafke/EDSR_Tensorflow/master/images/input.png>
 
-## Creative Commons License : <https://creativecommons.org/licenses/by-sa/3.0/deed.en>
+## Apache License 2.0 : <https://github.com/Saafke/EDSR_Tensorflow/blob/master/LICENSE>
