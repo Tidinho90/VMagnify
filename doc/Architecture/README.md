@@ -63,13 +63,13 @@ The class has 8 methods, in Python methods which start with __ are by convention
 __generate_pictures() method is responsible of the read of the input picture and the process of the 3 zoomed pictures.
 The input of the method is the file path of the picture.
 
-[!__generate_pictures()](__generate_pictures().png)
+![__generate_pictures()](__generate_pictures().png)
 
 #### process_url() method
 
 process_url() method is responsible of the download of the url of the user and the process of it.
 
-[!process_url()](process_url().png)
+![process_url()](process_url().png)
 
 The functions called by the method are :
 

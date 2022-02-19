@@ -32,7 +32,7 @@ When the user terminates the session, all data shall be dumped.
 
 #### Pictures UI
 
-The pictures UI shall be conformant to [!Picture_UI_Specification](Picture_UI_Specification.png)
+The pictures UI shall be conformant to ![Picture_UI_Specification](Picture_UI_Specification.png)
 
 The pictures UI shall contains the following content :
 

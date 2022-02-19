@@ -1,6 +1,6 @@
 # VMagnify
 
-[!Vmagnify Logo](static/img/logo/VMagnify30.jpg)
+![Vmagnify](static/img/logo/VMagnify30.png)
 
 - [VMagnify](#vmagnify)
   - [Overview](#overview)
@@ -14,6 +14,7 @@
     - [Launch the application](#launch-the-application)
       - [Linux](#linux)
       - [Windows](#windows)
+    - [References](#references)
 
 ## Overview
 
@@ -65,3 +66,9 @@ In a terminal, execute the following command :
 In a terminal, execute the following command :
 
 ```python.exe app.py```
+
+### References
+
+<https://www.pyimagesearch.com/2020/11/09/opencv-super-resolution-with-deep-learning/>
+
+<https://bleedai.com/super-resolution-going-from-3x-to-8x-resolution-in-opencv/>
