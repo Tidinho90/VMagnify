@@ -14,13 +14,13 @@
 
 The VMagnify application is a server software designed to communicate with the user browser via HTTP.
 
-[!Global Architecture](Global_Architecture.png)
+![Global Architecture](Global_Architecture.png)
 
 ## Application architecture
 
 The application is composed of 3 source files :
 
-[!Application Architecture](Application_Architecture.png)
+![Application Architecture](Application_Architecture.png)
 
 1. app.py is the main application file.
 2. vmanify.py is an abstract class to share code between picture and video processings.
