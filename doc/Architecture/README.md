@@ -18,25 +18,17 @@ The VMagnify application is a server software designed to communicate with the u
 
 ## Application architecture
 
-The application is composed of 4 source files :
+The application is composed of 3 source files :
 
 [!Application Architecture](Application_Architecture.png)
 
 1. app.py is the main application file.
 2. vmanify.py is an abstract class to share code between picture and video processings.
 3. vmanify_picture.py is the class for picture processing.
-4. vmanify_picture.py is the class for video processing.
 
 ## app.py file
 
-app.py is the main file of the application, it contains all the route of the application.
-
-The form of the picture processing contains 4 routes :
-
-1. Load URL button route
-2. Load Disk button route
-3. Zoom slider route, by default, this road shall be disabled and enabled when the processing of the image is finished.
-4. Close of the connection route
+app.py is the main file of the application, it contains the UI and the callback which is the core of the application.
 
 ## vmanify_picture class
 

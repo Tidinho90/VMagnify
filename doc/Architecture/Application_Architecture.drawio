@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="Z6Zl731hEpYsmYyRKsTD" name="Application Architecture">
-        <mxGraphModel dx="990" dy="691" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+        <mxGraphModel dx="1074" dy="521" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
             <root>
                 <mxCell id="FGZHOIzdyHBwlUi2fdTw-0"/>
                 <mxCell id="FGZHOIzdyHBwlUi2fdTw-1" parent="FGZHOIzdyHBwlUi2fdTw-0"/>
@@ -36,24 +36,6 @@
                     <mxGeometry x="-1" relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="FGZHOIzdyHBwlUi2fdTw-11" value="child" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" parent="FGZHOIzdyHBwlUi2fdTw-9" connectable="0" vertex="1">
-                    <mxGeometry x="1" relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="FGZHOIzdyHBwlUi2fdTw-12" value="vmanify_video.py(class)" style="rounded=0;whiteSpace=wrap;html=1;" parent="FGZHOIzdyHBwlUi2fdTw-1" vertex="1">
-                    <mxGeometry x="680" y="600" width="240" height="120" as="geometry"/>
-                </mxCell>
-                <mxCell id="FGZHOIzdyHBwlUi2fdTw-13" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="FGZHOIzdyHBwlUi2fdTw-1" source="FGZHOIzdyHBwlUi2fdTw-3" target="FGZHOIzdyHBwlUi2fdTw-12" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="620" y="640.05" as="sourcePoint"/>
-                        <mxPoint x="460.0000000000002" y="780.05" as="targetPoint"/>
-                        <Array as="points">
-                            <mxPoint x="800" y="460"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="FGZHOIzdyHBwlUi2fdTw-14" value="parent" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;" parent="FGZHOIzdyHBwlUi2fdTw-13" connectable="0" vertex="1">
-                    <mxGeometry x="-1" relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="FGZHOIzdyHBwlUi2fdTw-15" value="child" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" parent="FGZHOIzdyHBwlUi2fdTw-13" connectable="0" vertex="1">
                     <mxGeometry x="1" relative="1" as="geometry"/>
                 </mxCell>
             </root>

@@ -2,7 +2,7 @@
 
 ## Intro
 
-The VMagnify application shall be a web application which permits to the user to display a picture/video in an higher resolution up to 8X the resolution of the image in input.
+The VMagnify application shall be a web application which permits to the user to display a picture in an higher resolution up to 4X the resolution of the image in input.
 
 ## Requirements
 
@@ -38,7 +38,6 @@ The pictures UI shall contains the following content :
 
 - An URL text box to enter the URL of a picture on Internet.
 - A button to validate the URL and start the processing of the resulting picture.
-- A button to upload a picture file and start the processing of the resulting picture.
 - A text box to display the image size.
 - An image canvas to display the image.
 - An image slider to zoom in/out on the picture.  
@@ -65,14 +64,7 @@ After requirements are validated, the picture can be processed.
 #### Processing of pictures
 
 The processing of pictures shall be done after the user validates his picture choice.
-A system shall block the UI until the processing is done. (TBC)
 
 #### Processing algorithm of pictures
 
 As seen in [learnopencv.com](https://learnopencv.com/super-resolution-in-opencv/), processing of the pictures shall use the ESDR algorithm because it has the best signal/noise ratio.
-
-### Videos
-
-### Processing algorithm of videos
-
-As seen in [learnopencv.com](https://learnopencv.com/super-resolution-in-opencv/), processing of the images shall use the ESPCN algorithm because it is the fastest deep-learning algorithm.
