@@ -1,6 +1,6 @@
 # VMagnify
 
-[!Vmagnify Logo](static/img/logo/VMagnify50.png)
+[!Vmagnify Logo](static/img/logo/VMagnify30.jpg)
 
 - [VMagnify](#vmagnify)
   - [Overview](#overview)
